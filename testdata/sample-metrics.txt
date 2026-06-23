@@ -1,0 +1,9 @@
+# HELP dnsmon_queries_total Total DNS responses observed by dnsmon.
+# TYPE dnsmon_queries_total counter
+dnsmon_queries_total{namespace="default",pod="checkout-7bd",domain="payments.example.com",server="10.96.0.10",rcode="NOERROR"} 142
+# HELP dnsmon_latency_seconds DNS query to response latency by pod, domain and server.
+# TYPE dnsmon_latency_seconds histogram
+dnsmon_latency_seconds_bucket{namespace="default",pod="checkout-7bd",domain="payments.example.com",server="10.96.0.10",le="0.05"} 100
+# HELP dnsmon_nxdomain_total DNS NXDOMAIN responses observed by dnsmon.
+# TYPE dnsmon_nxdomain_total counter
+dnsmon_nxdomain_total{namespace="default",pod="api-6ff",domain="does-not-exist.example.com",server="10.96.0.10"} 23

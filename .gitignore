@@ -1,0 +1,5 @@
+/bin/
+*.o
+cmd/dnsmon/dnsmon_bpf*.go
+cmd/dnsmon/dnsmon_bpf*.o
+.DS_Store

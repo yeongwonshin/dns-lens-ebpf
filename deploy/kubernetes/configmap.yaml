@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dnsmon-config
+  namespace: dnsmon-system
+data:
+  METRICS_ADDR: ":9090"
+  IFACE_PREFIX: "veth,cali,cilium,flannel,eth"
+  LATENCY_THRESHOLD: "200ms"
+  TIMEOUT_WINDOW: "2s"
+  DOMAIN_ALLOW_SUFFIX: ""
+  DOMAIN_DENY_SUFFIX: ""
+  MAX_DOMAIN_LABELS: "5"

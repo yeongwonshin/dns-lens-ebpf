@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dns-load
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: dns-load
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              for i in $(seq 1 300); do
+                nslookup kubernetes.default.svc.cluster.local >/dev/null || true
+                nslookup does-not-exist-${i}.example.com >/dev/null || true
+                sleep 1
+              done

@@ -1,0 +1,58 @@
+{
+  "title": "eBPF DNS Latency Monitor",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "tags": ["dns", "ebpf", "kubernetes"],
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "DNS p95 latency by domain",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (le, domain) (rate(dnsmon_latency_seconds_bucket[$__rate_interval])))",
+          "legendFormat": "{{domain}}"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+    },
+    {
+      "type": "timeseries",
+      "title": "NXDOMAIN ratio by pod/domain",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {
+          "expr": "sum by (namespace, pod, domain) (rate(dnsmon_nxdomain_total[$__rate_interval])) / clamp_min(sum by (namespace, pod, domain) (rate(dnsmon_queries_total[$__rate_interval])), 1)",
+          "legendFormat": "{{namespace}}/{{pod}} {{domain}}"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+    },
+    {
+      "type": "stat",
+      "title": "Timeouts in last 5m",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {
+          "expr": "sum(increase(dnsmon_timeouts_total[5m]))",
+          "legendFormat": "timeouts"
+        }
+      ],
+      "gridPos": {"h": 6, "w": 6, "x": 0, "y": 8}
+    },
+    {
+      "type": "timeseries",
+      "title": "DNS QPS by namespace",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {
+          "expr": "sum by (namespace) (rate(dnsmon_queries_total[$__rate_interval]))",
+          "legendFormat": "{{namespace}}"
+        }
+      ],
+      "gridPos": {"h": 6, "w": 18, "x": 6, "y": 8}
+    }
+  ]
+}
